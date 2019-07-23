@@ -9,6 +9,7 @@
 import './a.css';
 import a from './a.scss?v=122';
 import { use } from './a.less?v=122';
+import { use as u } from './u.js?./a.less?v=122';
 import * as a1 from './a.scss?v=122';
 
 import('./b.css');
@@ -20,7 +21,7 @@ export default async () => {
     import('./b.sass?use').then((style) => style);
     import('./b.sass').then(({ use }) => use);
 
-    return { b, use, a1 };
+    return { b, use, a1, u };
 };
 
 require('./c.css');

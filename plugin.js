@@ -32,7 +32,10 @@ module.exports = declare(api => {
         visitor: {
             ImportDeclaration: replaceSource('ImportSpecifier'),
             ExportAllDeclaration: replaceSource('all'),
-            ExportNamedDeclaration: replaceSource('ExportSpecifier')
+            ExportNamedDeclaration: replaceSource('ExportSpecifier'),
+            CallExpression(...args) {
+                console.log(args);
+            }
         }
     };
 });
