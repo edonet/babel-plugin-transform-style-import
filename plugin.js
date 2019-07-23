@@ -35,10 +35,15 @@ function ImportDeclaration({ node }) {
 
         // 更新路径
         if (!('module' in matched.query)) {
-            node.source = createSource(
-                resource + (matched.search ? '&' : '?') + 'module' + (use ? '=styled' : ''),
-                node.source
-            );
+            let search = '?module' + (use ? '=styled' : '');
+
+            // 拼接查询参数
+            if (matched.search) {
+                search += '&' + matched.search.slice(1);
+            }
+
+            // 更新源码
+            node.source = createSource(resource + search, node.source);
         }
     }
 }

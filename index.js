@@ -13,7 +13,7 @@
  *****************************************
  */
 const path = require('path');
-const plugin = require('./babel-plugin-transform-style-import');
+const plugin = require('./plugin');
 
 
 /**
