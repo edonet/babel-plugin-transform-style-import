@@ -3,6 +3,15 @@
     "version": "0.0.101",
     "description": "A babel plugin for transform style import",
     "main": "index.js",
+    "files": [
+        "index.js",
+        "plugin.js",
+        "loader.js",
+        "helpers"
+    ],
+    "scripts": {
+        "examples": "node examples"
+    },
     "repository": "git@github.com:edonet/babel-plugin-transform-style-import.git",
     "author": "edonet <edonet@163.com>",
     "license": "MIT",
@@ -10,5 +19,8 @@
         "@airb/style": "^0.0.1",
         "@babel/core": "^7.5.4",
         "@babel/helper-plugin-utils": "^7.0.0"
+    },
+    "devDependencies": {
+        "@babel/plugin-syntax-dynamic-import": "^7.2.0"
     }
 }

@@ -12,51 +12,8 @@
  * 加载依赖
  *****************************************
  */
-const { types } = require('@babel/core');
 const { declare } = require('@babel/helper-plugin-utils');
-const match = require('@airb/style/match');
-
-
-/**
- *****************************************
- * 处理加载语句
- *****************************************
- */
-function ImportDeclaration({ node }) {
-    let resource = node.source.value,
-        matched = match(resource);
-
-
-    // 匹配样式语句
-    if (matched && node.specifiers.length) {
-        let use = node.specifiers.find(
-                x => x.type === 'ImportSpecifier' && x.local.name === 'use'
-            );
-
-        // 更新路径
-        if (!('module' in matched.query)) {
-            let search = '?module' + (use ? '=styled' : '');
-
-            // 拼接查询参数
-            if (matched.search) {
-                search += '&' + matched.search.slice(1);
-            }
-
-            // 更新源码
-            node.source = createSource(resource + search, node.source);
-        }
-    }
-}
-
-
-/**
- *****************************************
- * 复制节点信息
- *****************************************
- */
-function createSource(value, { start, end, loc }) {
-    return Object.assign(types.stringLiteral(value), { start, end, loc });
-}
+const replaceSource = require('./helpers/replaceSource');
 
 
 /**
@@ -73,7 +30,9 @@ module.exports = declare(api => {
     return {
         name: 'transform-style-import',
         visitor: {
-            ImportDeclaration
+            ImportDeclaration: replaceSource('ImportSpecifier'),
+            ExportAllDeclaration: replaceSource('all'),
+            ExportNamedDeclaration: replaceSource('ExportSpecifier')
         }
     };
 });
