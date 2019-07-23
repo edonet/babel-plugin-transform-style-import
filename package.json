@@ -1,6 +1,6 @@
 {
     "name": "babel-plugin-transform-style-import",
-    "version": "0.0.1",
+    "version": "0.0.101",
     "description": "A babel plugin for transform style import",
     "main": "index.js",
     "repository": "git@github.com:edonet/babel-plugin-transform-style-import.git",
