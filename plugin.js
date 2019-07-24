@@ -14,6 +14,22 @@
  */
 const { declare } = require('@babel/helper-plugin-utils');
 const replaceSource = require('./helpers/replaceSource');
+const resolveRequireExpr = require('./helpers/resolveRequireExpr');
+const resolveImportExpr = require('./helpers/resolveImportExpr');
+
+
+/**
+ *****************************************
+ * 校验调用加载函数
+ *****************************************
+ */
+function validateCallExpr(args, parent) {
+    return (
+        args.length === 1 &&
+        args[0].type === 'StringLiteral' &&
+        parent.type !== 'ExpressionStatement'
+    );
+}
 
 
 /**
@@ -33,8 +49,30 @@ module.exports = declare(api => {
             ImportDeclaration: replaceSource('ImportSpecifier'),
             ExportAllDeclaration: replaceSource('all'),
             ExportNamedDeclaration: replaceSource('ExportSpecifier'),
-            CallExpression(...args) {
-                console.log(args);
+            CallExpression(expr) {
+                let node = expr.node,
+                    callee = node.callee;
+
+                // 处理加载语句
+                if (callee.name === 'require') {
+
+                    // 处理动态加载
+                    if (validateCallExpr(node.arguments, expr.parent)) {
+                        resolveRequireExpr(node, expr);
+                    }
+
+                    // 退出处理
+                    return;
+                }
+
+                // 动态加载
+                if (callee.type === 'Import') {
+
+                    // 处理动态加载
+                    if (validateCallExpr(node.arguments, expr.parent)) {
+                        resolveImportExpr(node, expr);
+                    }
+                }
             }
         }
     };

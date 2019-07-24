@@ -62,4 +62,9 @@ function matchQuery(query) {
  * 抛出接口
  *****************************************
  */
-module.exports = { matchStyle, matchQuery };
+module.exports = {
+    STYLED_IDENT: 'use',
+    IGNORE_SIGN: 'IGNORE_SIGN',
+    matchStyle,
+    matchQuery
+};

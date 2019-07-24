@@ -13,7 +13,7 @@
  *****************************************
  */
 const createSource = require('./createSource');
-const { matchStyle, matchQuery } = require('./match');
+const { STYLED_IDENT, matchStyle, matchQuery } = require('./match');
 
 
 /**
@@ -23,19 +23,25 @@ const { matchStyle, matchQuery } = require('./match');
  */
 function replaceSource(type, node) {
     let resource = node.source.value,
-        result = matchStyle(resource);
+        style = matchStyle(resource);
 
     // 匹配样式语句
-    if (type === 'all' || result.matched && node.specifiers.length) {
-        let { resourcePath, resourceQuery } = result,
-            use = (
+    if (type === 'all' || style.matched && node.specifiers.length) {
+        let { resourcePath, resourceQuery } = style,
+            styled = (
                 type === 'all' ||
-                node.specifiers.find(x => x.type === type && x.local.name === 'use')
+                node.specifiers.find(
+                    x => x.type === type && (
+                        x.imported ?
+                        x.imported.name === STYLED_IDENT :
+                        x.local.name === STYLED_IDENT
+                    )
+                )
             );
 
         // 更新路径
         if (!matchQuery(resourceQuery)) {
-            let search = '?module' + (use ? '=styled' : '');
+            let search = '?module' + (styled ? '=styled' : '');
 
             // 拼接查询参数
             if (resourceQuery) {
