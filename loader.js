@@ -12,7 +12,7 @@
  * 加载依赖
  *****************************************
  */
-const match = require('@airb/style/match');
+const { matchQuery } = require('./helpers/match');
 
 
 /**
@@ -20,16 +20,24 @@ const match = require('@airb/style/match');
  * 定义代码
  *****************************************
  */
-const transform = (() => {
+const transform = (source) => {
+    let idx = source.indexOf('module.exports =');
 
-    // 返回方法
-    return source => (
-        source.replace('module.exports ', 'var locals ') +
-        '\nObject.defineProperty(exports, "__esModule", { value: true });' +
-        '\nexports.default = locals;' +
-        '\nexports.use = require("@airb/style/styled.js")(locals);'
-    );
-})();
+    // 变化源码
+    if (idx > -1) {
+        return (
+            source.slice(0, idx) +
+            'var locals ' +
+            source.slice(idx + 15) +
+            '\nObject.defineProperty(exports, "__esModule", { value: true });' +
+            '\nexports.default = locals;' +
+            '\nexports.use = require("@airb/style/styled.js")(locals);'
+        );
+    }
+
+    // 返回源码
+    return source;
+};
 
 
 /**
@@ -38,15 +46,19 @@ const transform = (() => {
  *****************************************
  */
 function loader(source) {
-    let matched = match(this.resource);
+    let query = this.query,
+        matched;
 
-    // 替换源码
-    if (matched && matched.query.module === 'styled') {
-        return transform(source);
+    // 匹配参数
+    if (typeof query === 'object') {
+        matched = query.styled;
+    } else {
+        matched = matchQuery(this.resourceQuery || '');
+        matched = matched && matched[1] === 'styled';
     }
 
     // 返回源码
-    return source;
+    return matched ? transform(source) : source;
 }
 
 
