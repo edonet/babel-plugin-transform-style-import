@@ -14,8 +14,8 @@
  */
 const { declare } = require('@babel/helper-plugin-utils');
 const replaceSource = require('./helpers/replaceSource');
-const resolveRequireExpr = require('./helpers/resolveRequireExpr');
-const resolveImportExpr = require('./helpers/resolveImportExpr');
+const resolveRequireCall = require('./helpers/resolveRequireCall');
+const resolveImportCall = require('./helpers/resolveImportCall');
 
 
 /**
@@ -58,7 +58,7 @@ module.exports = declare(api => {
 
                     // 处理动态加载
                     if (validateCallExpr(node.arguments, expr.parent)) {
-                        resolveRequireExpr(node, expr);
+                        resolveRequireCall(node, expr);
                     }
 
                     // 退出处理
@@ -70,7 +70,7 @@ module.exports = declare(api => {
 
                     // 处理动态加载
                     if (validateCallExpr(node.arguments, expr.parent)) {
-                        resolveImportExpr(node, expr);
+                        resolveImportCall(node, expr);
                     }
                 }
             }

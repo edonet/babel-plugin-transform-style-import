@@ -12,8 +12,8 @@
  * 加载依赖
  *****************************************
  */
-const createSource = require('./createSource');
-const { STYLED_IDENT, IGNORE_SIGN, matchStyle, matchQuery } = require('./match');
+const { STYLED_IDENT, IGNORE_SIGN } = require('./match');
+const resolveCallExpr = require('./resolveCallExpr');
 
 
 /**
@@ -70,28 +70,4 @@ function isUseStyled(parent, parentPath) {
  * 解析动态加载语句
  *****************************************
  */
-module.exports = (node, expr) => {
-    let resource = expr.node.arguments[0].value,
-        style = matchStyle(resource);
-
-    // 匹配样式语句
-    if (style.matched && !matchQuery(style.resourceQuery)) {
-        let styled = isUseStyled(expr.parent, expr.parentPath);
-
-        // 忽略处理
-        if (styled !== IGNORE_SIGN) {
-            let { resourcePath, resourceQuery } = style;
-
-            // 添加参数
-            resourcePath += '?module' + (styled ? '=styled' : '');
-
-            // 拼接查询参数
-            if (resourceQuery) {
-                resourcePath += '&' + resourceQuery.slice(1);
-            }
-
-            // 更新源码
-            node.arguments[0] = createSource(resourcePath, node.arguments[0]);
-        }
-    }
-};
+module.exports = resolveCallExpr(isUseStyled);

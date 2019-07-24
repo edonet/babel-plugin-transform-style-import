@@ -13,7 +13,7 @@
  *****************************************
  */
 const styleRE = /\.(css|scss|less|sass)$/i;
-const moduleRE = /(\?|&)module(=styled)?($|&)/i;
+const moduleRE = /(?:\?|&)module(?:=(.*?))?(?:$|&)/i;
 
 
 /**

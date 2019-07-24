@@ -16,12 +16,13 @@ import * as a1 from './a.scss?v=122';
 
 import('./b.css');
 
+const cb = ({ use }) => use;
+
 export default async () => {
     const b = import('./b.scss');
     const ab = await import('./b.css');
     const { default: def } = await import('./b.less');
     const { use } = await import('./b.less');
-    const cb = ({ use }) => use;
 
     await import('./b.css');
     cb(await import('./b.less'));
@@ -39,6 +40,10 @@ require('./c.css');
 const c = require('./c.scss');
 const { use: u3 } = require('./c.less');
 const u5 = require('./c.scss').use;
+
+cb(require('./e.css'));
+cb(require('./e.scss').use);
+cb(require('./e.scss?module').use);
 
 export * from './d.css';
 export { use } from './d.scss';

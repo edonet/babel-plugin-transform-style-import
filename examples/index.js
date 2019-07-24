@@ -15,6 +15,17 @@
 const fs = require('fs');
 const path = require('path');
 const { transform } = require('@babel/core');
+const query = require('./query');
+
+
+/**
+ *****************************************
+ * 读取文件内容
+ *****************************************
+ */
+function readFile(name) {
+    return fs.readFileSync(path.join(__dirname, name), 'utf8');
+}
 
 
 /**
@@ -23,7 +34,7 @@ const { transform } = require('@babel/core');
  *****************************************
  */
 function main() {
-    let source = fs.readFileSync(path.join(__dirname, 'source.js')),
+    let source = readFile('source.js'),
         options = {
             ast: true,
             plugins: [
@@ -41,7 +52,10 @@ function main() {
         }
 
         // 打印结果
-        console.log(result.code);
+        console.log(result.code === readFile('result.js').trim());
+
+        // 匹配查询参数
+        query();
     });
 }
 
