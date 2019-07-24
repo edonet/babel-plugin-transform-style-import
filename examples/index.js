@@ -16,6 +16,7 @@ const fs = require('fs');
 const path = require('path');
 const { transform } = require('@babel/core');
 const query = require('./query');
+const loader = require('./loader');
 
 
 /**
@@ -54,8 +55,9 @@ function main() {
         // 打印结果
         console.log(result.code === readFile('result.js').trim());
 
-        // 匹配查询参数
+        // 启动校验
         query();
+        loader();
     });
 }
 

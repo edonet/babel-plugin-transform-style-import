@@ -46,15 +46,17 @@ const transform = (source) => {
  *****************************************
  */
 function loader(source) {
-    let query = this.query,
-        matched;
+    let matched;
 
     // 匹配参数
-    if (typeof query === 'object') {
-        matched = query.styled;
-    } else {
+    if (this.resourceQuery) {
         matched = matchQuery(this.resourceQuery || '');
         matched = matched && matched[1] === 'styled';
+    }
+
+    // 匹配配置
+    if (!matched && this.query && typeof this.query === 'object') {
+        matched = this.query.styled;
     }
 
     // 返回源码
