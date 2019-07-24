@@ -1,6 +1,6 @@
 {
     "name": "babel-plugin-transform-style-import",
-    "version": "0.0.102",
+    "version": "0.0.103",
     "description": "A babel plugin for transform style import",
     "main": "index.js",
     "files": [
