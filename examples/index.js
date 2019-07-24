@@ -53,7 +53,9 @@ function main() {
         }
 
         // 打印结果
-        console.log(result.code === readFile('result.js').trim());
+        if(result.code !== readFile('result.js').trim()) {
+            console.log(result.code);
+        }
 
         // 启动校验
         query();

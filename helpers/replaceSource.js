@@ -26,7 +26,7 @@ function replaceSource(type, node) {
         style = matchStyle(resource);
 
     // 匹配样式语句
-    if (type === 'all' || style.matched && node.specifiers.length) {
+    if (style.matched && (type === 'all' || node.specifiers.length)) {
         let { resourcePath, resourceQuery } = style,
             styled = (
                 type === 'all' ||

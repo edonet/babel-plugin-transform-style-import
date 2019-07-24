@@ -45,6 +45,7 @@ cb(require('./e.css'));
 cb(require('./e.scss').use);
 cb(require('./e.scss?module').use);
 
+export * from './d.jsx';
 export * from './d.css';
 export { use } from './d.scss';
 export { use as u2 } from './d.scss';
